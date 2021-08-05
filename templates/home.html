@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block reqCSS %}
+{% endblock reqCSS %}
+{% block content %}
+<div class="aligncenter">
+    <form class="row g-3" id="URLForm" method="POST">
+        {{ form.csrf_token }}
+        <div class="col-md">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
+                        <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                        <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+                    </svg>
+                </span>
+                {{ form.Urlinp(class="form-control", placeholder="Enter Your URL", id="urlinput", value = encurl if encurl )}}
+            </div>
+        </div>
+        <div class="col-auto">
+            <button type="submit" id="urlsubmit" class="btn btn-secondary mb-3">Trace URL</button>
+        </div>
+    </form>
+    <div class="tracedurls">
+    {% if tracedurls %}
+        {% for count,urldetails in tracedurls.items() %}
+        <div class="input-group">
+            <span class="input-group-text" id="basic-addon1">
+            {{ urldetails[1] }}  
+            </span>
+            <input class="form-control" type="text" value={{ urldetails[0] }}  readonly>
+        </div>   
+        {% endfor %}    
+    {% endif %}
+    </div>
+</div>    
+{% endblock content %}
+{% block reqJS %}
+<script src="static/js/home.js" async></script>
+<script async>
+    document.getElementById("urlsubmit").disabled = true;
+</script>
+<script async>
+    var submitButton = document.getElementById("urlsubmit");
+    submitButton.addEventListener("click", () => {
+        var inputBoxValue = document.getElementById("urlinput").value;
+        var regex = new RegExp("\\s", "g");
+        var replace = "";
+        var res = inputBoxValue.replace(regex, replace);
+        res = encodeURI(res);
+        document.getElementById("urlinput").value = res;
+        document.getElementById("URLForm").action = "{{ url_for('trace') }}";
+        document.getElementById("URLForm").submit;
+});
+</script> 
+{% endblock reqJS %}
