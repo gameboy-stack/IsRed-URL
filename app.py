@@ -4,10 +4,17 @@ from urllib.parse import urlparse
 from requests.utils import requote_uri
 from form import UrlInput
 from datetime import datetime
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 
+dotenv_path = join(dirname(__file__), '.env_sample')
+load_dotenv(dotenv_path)
+
+SECRET_KEY = os.environ.get("secret_key")
 
 app = Flask(__name__)
-app.secret_key = "secret_key"
+app.secret_key = SECRET_KEY
 
 @app.route("/",methods=["GET"])
 def home():
