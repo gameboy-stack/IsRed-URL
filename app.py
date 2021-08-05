@@ -33,8 +33,6 @@ async def tracingfunc(givenURL):
         elif(not response.history):
             responseHistory = [[str(response.url),str(response.status_code)]]
     except:
-        pass
-    finally:
         responseHistory =[[str(givenURL),"None"]]
     return responseHistory
 
