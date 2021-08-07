@@ -14,7 +14,7 @@ load_dotenv(dotenv_path)
 SECRET_KEY = os.environ.get("secret_key")
 
 app = Flask(__name__)
-app.secret_key = SECRET_KEY
+app.secret_key = "SECRET_KEY"
 
 @app.route("/",methods=["GET"])
 def home():
@@ -28,10 +28,9 @@ async def tracingfunc(givenURL):
         }
     try:
         response =  req.get(str(givenURL),headers=headers)
-        if response.history:
-            responseHistory = [[str(i.url),str(i.status_code)] for i in response.history] + [[str(response.url),str(response.status_code)]] 
-        elif(not response.history):
-            responseHistory = [[str(response.url),str(response.status_code)]]
+        
+        responseHistory = [[str(i.url),str(i.status_code)] for i in response.history] + [[str(response.url),str(response.status_code)]] if response.history else [[str(response.url),str(response.status_code)]]
+
     except:
         responseHistory =[[str(givenURL),"None"]]
     return responseHistory
